@@ -1,0 +1,68 @@
+create database if not exists clinica_nome
+default character set utf8mb4
+--  anotações
+collate utf8mb4_0900_ai_ci; 
+use clinica_nome;
+
+create table if not exists paciente (
+	id int primary key auto_increment,
+    nome varchar(30) not null,
+    data_nascimento date,
+    altura decimal(3,2),
+    status_cadastro boolean,
+    genero enum ('M','F','OUTRO')
+) character set utf8mb4;
+insert into paciente
+(nome, data_nascimento, altura, status_cadastro, genero)
+values
+('João','2000-03-30',1.80,true,'M'),
+('Maria','2001-02-25',1.58,true,'F'),
+('Matheus','2005-09-10',1.88,true,'M'),
+('Paulo','1999-06-25',1.77,true,'M'),
+('Vanessa','1997-02-15',1.60,true,'F'),
+('Thiago','2008-10-20',1.70,true,'M'),
+('Raiane','2007-09-22',1.65,true,'F');
+select*from paciente;
+delete from paciente where 2;
+-- Atividade 01: inserir mais 5 registros de paciente (código completo) igual exemplo
+
+create table if not exists medico(
+	id int primary key auto_increment,
+    nome varchar(30)
+) character set utf8mb4;
+insert into medico
+(nome) values
+('Julia'),
+('Zeca'),
+('Kelly'),
+('Leon'),
+('Lara'),
+('marlon');
+
+
+select*from medico;
+
+-- Atividade 02 inserir mais 5 registros de médico (código completo) igual exemplo
+create table if not exists consulta (
+	id int primary key auto_increment,
+    data_time datetime,
+    id_paciente int,
+    id_medico int,
+    foreign key (id_paciente) references paciente(id),
+    foreign key (id_medico) references medico(id)
+) character set utf8mb4;
+insert into consulta
+(data_time,id_paciente, id_medico)
+values
+('2026-09-15 10:51:55',2,1),
+('2026-09-15 11:40:05',4,2),
+('2026-09-18 12:44:00',5,6),
+('2026-09-19 14:25:15',7,3),
+('2026-09-20 09:00:25',3,5),
+('2026-09-20 08:20:09',1,7),
+('2026-09-30 20:55:14',6,4);
+select*from consulta;
+select consulta.id, consulta.data_time, paciente.nome, medico.nome
+from consulta
+inner join paciente on consulta.id_paciente = paciente.id
+inner join medico on consulta.id_medico = medico.id;
