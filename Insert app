@@ -1,0 +1,88 @@
+create database if not exists app_nutrilIA;
+use app_nutrilIA;
+drop database app_nutrilIA;
+
+create table usuario (
+    id_usuario      int auto_increment primary key,
+    nome            varchar(120)    not null,
+    email           varchar(150)    not null unique,
+    peso_kg         decimal(5,2),
+    altura_cm       decimal(5,2),
+    data_nascimento date
+);
+insert into usuario
+(nome, email, peso_kg, altura_cm, data_nascimento)
+values 
+('João Silva', 'joao@email.com', 75.50, 175.00, '2000-05-15'),
+('Maria Santos', 'maria@email.com', 62.30, 165.00, '1999-08-20'),
+('Pedro Oliveira', 'pedro@email.com', 82.70, 180.00, '1998-03-10'),
+('Ana Costa', 'ana@email.com', 58.90, 160.00, '2001-11-25'),
+('Lucas Pereira', 'lucas@email.com', 90.20, 185.00, '1997-07-05'),
+('Julia Almeida', 'julia@email.com', 55.40, 162.00, '2002-01-30');
+SELECT*FROM  usuario;
+
+create table ALIMENTO (
+    id_alimento         int auto_increment primary key,
+    nome                varchar(120)    not null,
+    calorias_100g       decimal(6,2),
+    proteina_100g       decimal(6,2),
+    carboidrato_100g    decimal(6,2),
+    gordura_100g        decimal(6,2)
+);
+INSERT INTO ALIMENTO
+(nome, calorias_100g, proteina_100g, carboidrato_100g, gordura_100g)
+VALUES
+('Arroz branco', 130.00, 2.70, 28.20, 0.30),
+('Feijão carioca', 76.00, 4.80, 13.60, 0.50),
+('Frango grelhado', 165.00, 31.00, 0.00, 3.60),
+('Ovo cozido', 155.00, 13.00, 1.10, 10.60),
+('Banana', 89.00, 1.10, 22.80, 0.30),
+('Aveia', 389.00, 16.90, 66.30, 6.90);
+SELECT*FROM ALIMENTO;
+
+
+create table refeicao (
+    id_refeicao     int auto_increment primary key,
+    id_usuario      int not null,
+    refeicao        varchar(20),
+    data_hora       datetime,
+    constraint fk_refeicao_usuario
+        foreign key (id_usuario) references usuario (id_usuario)
+        on update cascade
+        on delete cascade
+);
+drop table refeicao;
+INSERT INTO refeicao
+( id_usuario,refeicao, data_hora)
+VALUES
+(1, 'Café da manhã','2026-09-29 07:30:00'),
+(3, 'Almoço', '2026-09-29 12:30:00'),
+(1, 'Jantar', '2026-09-29 19:30:00'),
+(2, 'Café da manhã', '2026-09-29 08:00:00'),
+(5, 'Almoço', '2026-09-29 13:00:00'),
+(6, 'Jantar','2026-09-29 20:00:00');
+SELECT*FROM refeicao;
+
+create table meta_nutricional(
+    id_meta            int auto_increment key,
+    id_usuario          int not null,
+    calorias_diarias    int,
+    proteina_g          decimal(6,2),
+    carboidrato_g       decimal(6,2),
+    gordura_g           decimal(6,2),
+    data_inicio         date,
+    constraint fk_meta_usuario
+        foreign key (id_usuario) references usuario (id_usuario)
+        on update cascade
+        on delete cascade
+);
+INSERT INTO meta_nutricional
+(id_usuario, calorias_diarias, proteina_g, carboidrato_g, gordura_g, data_inicio)
+VALUES
+(1, 2200, 140.00, 250.00, 70.00, '2026-09-01'),
+(2, 1900, 110.00, 220.00, 60.00, '2026-09-01'),
+(3, 2500, 160.00, 280.00, 80.00, '2026-09-01'),
+(4, 1800, 100.00, 210.00, 55.00, '2026-09-01'),
+(5, 2700, 170.00, 300.00, 85.00, '2026-09-01'),
+(6, 1850, 105.00, 215.00, 58.00, '2026-09-01');
+SELECT*FROM meta_nutricional;
